@@ -18,6 +18,22 @@ const StyledNavbar = styled.div`
 
 const StyledLink = styled(Link)`
   color:black;
+  position: relative;
+`
+
+const TotalItems = styled.span`
+  position: absolute;
+  color: white;
+  height: 20px;
+  width: 20px;
+  top: -14px;
+  left: 20px;
+  color: black;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 50%;
+  font-size: .9rem;
+
 `
 
 
@@ -26,7 +42,10 @@ export const Navbar = () => {
   return (
     <StyledNavbar >
       <StyledLink to='/'>Home</StyledLink>
-      <StyledLink to='cart'><FontAwesomeIcon icon={ faCartShopping } size="xl" /></StyledLink>
+      <StyledLink to='cart' aria-label='cart'>
+        <TotalItems>1</TotalItems>
+        <FontAwesomeIcon icon={faCartShopping} size="xl" />
+      </StyledLink>
     </StyledNavbar>
   )
 }

@@ -28,7 +28,7 @@ function App() {
   
   return (
     <>
-      <MainHeader>Sample Shopfront</MainHeader>
+      <MainHeader role='heading'>Sample Shopfront</MainHeader>
       {isLoading && (
         <Loading>Loading...</Loading>
       )}

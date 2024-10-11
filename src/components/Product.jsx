@@ -39,7 +39,7 @@ export const Product = ({data}) => {
         <p>{data.title}</p>
         <p>${ data.price}</p>
       </ProductInfo>
-      <ProductButton>Add to Cart</ProductButton>
+      <ProductButton role="button">Add to Cart</ProductButton>
     </StyledProduct>
   )
 }
