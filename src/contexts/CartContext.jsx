@@ -5,14 +5,12 @@ const CartContext = createContext()
 
 export const CartContextProvider = ({ children }) => {
   const [cart, setCart] = useState([])
-  const [cartTotalItems, setCartTotalItems] = useState(null)
-  const [cartTotalPrice, setCartTotalPrice] = useState(null)
+  const [cartTotalItems, setCartTotalItems] = useState(0)
+  const [cartTotalPrice, setCartTotalPrice] = useState(0)
 
   const addToCart = (itemId) => {
-    setCartTotalItems((prevTotal) => prevTotal + 1)
     setCart((prevCart) => {
       const itemExists = prevCart.find(item => item.id === itemId)
-      console.log(cartTotalItems)
 
       if (itemExists) {
         return prevCart.map(item => (
@@ -23,21 +21,25 @@ export const CartContextProvider = ({ children }) => {
       }
       return [...prevCart, {id: itemId, amount: 1}]
     })
+    setCartTotalItems((prevTotal) => prevTotal + 1)
   }
 
   const removeFromCart = (itemId) => {
+    setCartTotalItems((prevTotal) => prevTotal > 1 ? prevTotal -1 : 0)
     setCart((prevCart) => {
-      const toRemove = prevCart.findIndex((item) => item.id === itemId)
-      setCartTotalItems((prevTotal) => prevTotal - 1)
+      const itemIndex = prevCart.findIndex((item) => item.id === itemId)
+      if (itemIndex === -1) return prevCart
 
-      if (prevCart[toRemove].amount > 1) {
-        prevCart[toRemove].amount -= 1
-        return [...prevCart]
+      const updatedCart = [...prevCart]
+      if (updatedCart[itemIndex].amount > 1) {
+        updatedCart[itemIndex] = {
+          ...updatedCart[itemIndex],
+          amount: updatedCart[itemIndex].amount -1
+        }
+        return updatedCart
+      } else {
+        return updatedCart.filter((item, index) => index !== itemIndex)
       }
-      const newCart = prevCart.split(0, toRemove)
-      newCart.concat(prevCart.split(toRemove + 1, prevCart.length))
-      return [...newCart]
-      
     })
   }
 
