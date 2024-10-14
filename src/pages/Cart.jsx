@@ -11,19 +11,26 @@ export const Cart = () => {
   const { cart, addToCart, removeFromCart  } = useContext(CartContext)
   
   const CartContainer = styled.div`
-  display: grid;
-  justify-content: start;
+  display: flex;
+  flex-direction: column;
   padding: 100px;
+  gap: 20px;
   `
 
   const CartItem = styled.div`
     display: flex;
     gap: 10px;
+    width: 70vw;
   `
 
   const ItemDesc = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     div:first-child {
       font-weight: bold;
+      text-align: left;
     }
 
   `
@@ -31,7 +38,7 @@ export const Cart = () => {
   const Quantity = styled.div`
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: start;
     gap: 5px;
 
     span {
@@ -52,7 +59,7 @@ export const Cart = () => {
   `
 
   const CartImage = styled.img`
-    max-width: 150px;
+    width: 150px;
     max-height: 150px;
     object-fit: cover;
   `
@@ -62,6 +69,18 @@ export const Cart = () => {
     text-align:center;
   `
 
+  const ItemTotal = styled.div`
+  
+  `
+
+  const GrandTotal = styled.div`
+    align-self: flex-end;
+    width: 100%;
+    text-align: right;
+    margin-right: 180px;
+
+  `
+
   if (isLoading) return <div>loading...</div>
 
   if (error) return <div>{error}</div>
@@ -69,28 +88,38 @@ export const Cart = () => {
   if (!data || !Array.isArray(data)) return <div>No products available</div>
 
 
+  const obtainGrandTotal = cart.reduce((total, item) => {
+    const product = data.find((product) => product.id === item.id)
+    return product ? total + product.price * item.amount : total
+  }, 0)
+  
   return (
     <>
       <StyledHeader>Your Cart</StyledHeader>
       <CartContainer>
-        {cart.length  ? (
-          cart.map((item) => {
-            const product = data.find((product) => product.id === item.id)
-            return product ? (
-              <CartItem key={product.id}>
-                <CartImage src={product.image}></CartImage>
-                <ItemDesc>
-                  <div>{product.title}</div>
-                  <Quantity>
-                    <span>Quantity: {item.amount}</span>
-                    <button onClick={() => removeFromCart(item.id)}><FontAwesomeIcon icon={faMinus} /></button>
-                    <button onClick={() => addToCart(item.id)}><FontAwesomeIcon icon={faPlus} /></button>
-                  </Quantity>
-                </ItemDesc>
-              </CartItem>
-            ) : 'No Products Available'
-          })
+        {cart.length ? (
+          <>
+            {cart.map((item) => {
+              const product = data.find((product) => product.id === item.id)
+              return product ? (
+                <CartItem key={product.id}>
+                  <CartImage src={product.image}></CartImage>
+                  <ItemDesc>
+                    <div>{product.title}</div>
+                    <Quantity>
+                      <span>Quantity: {item.amount}</span>
+                      <button onClick={() => removeFromCart(item.id)}><FontAwesomeIcon icon={faMinus} /></button>
+                      <button onClick={() => addToCart(item.id)}><FontAwesomeIcon icon={faPlus} /></button>
+                    </Quantity>
+                  </ItemDesc>
+                  <ItemTotal>Total: ${product.price * item.amount}</ItemTotal>
+                </CartItem>
+              ) : 'No Products Available'
+            })}
+            <GrandTotal>Grand Total: { obtainGrandTotal.toFixed(2) }</GrandTotal>
+          </>
         ) : 'No items in cart'}
+          
       </CartContainer>
     </>
 
