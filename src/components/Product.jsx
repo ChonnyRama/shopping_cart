@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
+import { CartContext } from '../contexts/CartContext';
+
 
 const StyledProduct = styled.div`
   display: flex;
@@ -31,7 +33,9 @@ const ProductInfo = styled.div`
 
 
 
-export const Product = ({data}) => {
+export const Product = ({ data }) => {
+  const { addToCart } = useContext(CartContext)
+  
   return (
     <StyledProduct>
       <Image src={data.image}></Image>
@@ -39,7 +43,10 @@ export const Product = ({data}) => {
         <p>{data.title}</p>
         <p>${ data.price}</p>
       </ProductInfo>
-      <ProductButton role="button">Add to Cart</ProductButton>
+      <ProductButton
+        role="button"
+        onClick={ () => addToCart(data.id)}
+      >Add to Cart</ProductButton>
     </StyledProduct>
   )
 }

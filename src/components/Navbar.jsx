@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartShopping} from '@fortawesome/free-solid-svg-icons'
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
+import { CartContext } from '../contexts/CartContext';
 
 const StyledNavbar = styled.div`
   display: flex;
@@ -39,11 +40,12 @@ const TotalItems = styled.span`
 
 
 export const Navbar = () => {
+  const { cartTotalItems } = useContext(CartContext)
   return (
     <StyledNavbar >
       <StyledLink to='/'>Home</StyledLink>
       <StyledLink to='cart' aria-label='cart'>
-        <TotalItems>1</TotalItems>
+        <TotalItems>{ cartTotalItems }</TotalItems>
         <FontAwesomeIcon icon={faCartShopping} size="xl" />
       </StyledLink>
     </StyledNavbar>

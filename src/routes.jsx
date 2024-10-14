@@ -3,14 +3,17 @@ import App from "./App";
 import { ErrorPage } from "./pages/ErrorPage";
 import { Cart } from "./pages/Cart";
 import { Navbar } from "./components/Navbar";
+import { CartContextProvider } from "./contexts/CartContext";
 
 const routes = [
   {
     path: "/",
     element: (
       <>
-        <Navbar/>
-        <App />
+        <CartContextProvider>
+          <Navbar/>
+          <App />
+        </CartContextProvider>
       </>
     ),
     errorElement: <ErrorPage />
@@ -19,8 +22,10 @@ const routes = [
     path: "cart",
     element: (
       <>
-        <Navbar/>
-        <Cart />
+        <CartContextProvider>
+          <Navbar/>
+          <Cart />
+        </CartContextProvider>
       </>
     ),
   }

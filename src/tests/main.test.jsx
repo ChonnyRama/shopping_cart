@@ -4,6 +4,7 @@ import {userEvent} from '@testing-library/user-event'
 import App from '../App.jsx'
 import { Navbar } from '../components/Navbar.jsx'
 import { MemoryRouter } from 'react-router-dom'
+import { CartContextProvider } from '../contexts/CartContext.jsx'
 
 describe('group', () => {
   it('should', () => {
@@ -29,8 +30,10 @@ describe('Homepage', () => {
   it('renders the navbar alongside the mainpage', () => {
     render(
       <MemoryRouter>
-        <Navbar/>
-        <App/>
+        <CartContextProvider>
+          <Navbar/>
+          <App/>
+        </CartContextProvider>
       </MemoryRouter>
     )
 
@@ -39,20 +42,22 @@ describe('Homepage', () => {
     expect(screen.getByRole("heading").textContent).toMatch(/Sample Shopfront/i)
   })
 
-  it('increments shopping cart after adding an item to the cart', async() => {
+  it('increments shopping cart after adding items to the cart', async() => {
     const user = userEvent.setup()
 
     render(<>
       <MemoryRouter>
-        <Navbar/>
-        <App/>
+        <CartContextProvider>
+          <Navbar/>
+          <App/>
+        </CartContextProvider>
       </MemoryRouter>
-
     </>)
     const buttons = screen.getAllByRole('button', { name: 'Add to Cart' })
     
     await user.click(buttons[0])
+    await user.click(buttons[1])
 
-    expect(screen.getByRole("link", {name: "cart"}).firstChild.textContent).toMatch(/1/i)
+    expect(screen.getByRole("link", {name: "cart"}).firstChild.textContent).toMatch(/2/i)
   })
  })
